@@ -31,11 +31,7 @@ class SolMemeGenerator:
         self.memecoin_styles = {
             "🐕 $WIF (Dogwifhat)": {
                 "description": "Pink beanie hat, cozy vibes, dog energy",
-                "prompt_template": """Using the provided profile picture, transform this person into the iconic Dogwifhat ($WIF) aesthetic while preserving their exact facial features, expression, and bone structure completely unchanged.
-
-Add a soft pink knitted beanie hat that fits naturally on their head. The overall mood should be cozy, friendly, and slightly playful. The lighting should remain consistent with the original image, creating a warm, domestic atmosphere. The background can be softly blurred with warm tones.
-
-Ensure the person's face, eye color, skin tone, and facial expression remain exactly as in the original image. The hat should look naturally placed and comfortable, matching the soft lighting of the scene."""
+                "prompt_template": """Transform this person into Dogwifhat style with a pink beanie hat. Keep their facial features exactly the same."""
             },
 
             "🥜 $BONK (Bonk)": {
