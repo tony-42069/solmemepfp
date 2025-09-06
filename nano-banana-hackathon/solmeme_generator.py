@@ -246,81 +246,99 @@ def main():
         st.header("⚙️ Settings")
         # Removed auto-save option - users can download manually
 
-    # Main content area
-    col1, col2 = st.columns([1, 1])
+    # Main content area - Single column layout to avoid spacing issues
+    st.markdown('<div class="upload-section">', unsafe_allow_html=True)
+    st.markdown('<h3 style="text-align: center; color: #333; margin-bottom: 2rem;">📸 Upload Your PFP</h3>', unsafe_allow_html=True)
 
-    with col1:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown('<h3 style="text-align: center; color: #333;">📸 Upload Your PFP</h3>', unsafe_allow_html=True)
+    # Enhanced file uploader with drag-and-drop styling
+    st.markdown("""
+    <style>
+    .file-uploader {
+        border: 3px dashed #4ecdc4 !important;
+        border-radius: 15px !important;
+        padding: 2rem !important;
+        background: rgba(78, 205, 196, 0.05) !important;
+        transition: all 0.3s ease !important;
+        text-align: center !important;
+        margin: 1rem 0 !important;
+    }
+    .file-uploader:hover {
+        border-color: #ff6b6b !important;
+        background: rgba(255, 107, 107, 0.1) !important;
+        transform: scale(1.02) !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-        # File uploader
-        uploaded_file = st.file_uploader(
-            "Choose your profile picture",
-            type=['png', 'jpg', 'jpeg'],
-            help="Upload a clear profile picture for best results"
+    # File uploader
+    uploaded_file = st.file_uploader(
+        "📂 Drag & drop your image here or click to browse",
+        type=['png', 'jpg', 'jpeg'],
+        help="Upload a clear profile picture for best results"
+    )
+
+    if uploaded_file is not None:
+        # Display uploaded image
+        uploaded_image = Image.open(uploaded_file)
+        st.image(uploaded_image, caption="Your Original PFP", use_column_width=True)
+
+        # Generate button
+        if st.button("🚀 Generate SolMeme PFP", type="primary"):
+            with st.spinner("✨ Creating your memecoin vibe... ✨"):
+                generated_image, message = generator.generate_pfp(
+                    uploaded_image,
+                    selected_style,
+                    custom_prompt
+                )
+
+                if generated_image:
+                    st.session_state.generated_image = generated_image
+                    st.session_state.generation_message = message
+                    st.markdown('<div class="success-message">🎉 Success! Your memecoin PFP is ready!</div>', unsafe_allow_html=True)
+                else:
+                    st.error(f"❌ {message}")
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Results section
+    if 'generated_image' in st.session_state:
+        st.markdown('<div class="results-section">', unsafe_allow_html=True)
+        st.markdown('<h3 style="text-align: center; color: #333; margin-bottom: 2rem;">✨ Your SolMeme PFP</h3>', unsafe_allow_html=True)
+
+        st.image(
+            st.session_state.generated_image,
+            caption=f"Your {selected_style} PFP",
+            use_column_width=True
         )
 
-        if uploaded_file is not None:
-            # Display uploaded image
-            uploaded_image = Image.open(uploaded_file)
-            st.image(uploaded_image, caption="Your Original PFP", use_column_width=True)
+        # Download button
+        img_buffer = BytesIO()
+        st.session_state.generated_image.save(img_buffer, format='PNG')
+        img_buffer.seek(0)
 
-            # Generate button
-            if st.button("🚀 Generate SolMeme PFP", type="primary"):
-                with st.spinner("✨ Creating your memecoin vibe... ✨"):
-                    generated_image, message = generator.generate_pfp(
-                        uploaded_image,
-                        selected_style,
-                        custom_prompt
-                    )
+        st.download_button(
+            label="💾 Download Your PFP",
+            data=img_buffer.getvalue(),
+            file_name=f"solmeme_pfp_{selected_style.split()[1].replace('$', '')}.png",
+            mime="image/png"
+        )
 
-                    if generated_image:
-                        st.session_state.generated_image = generated_image
-                        st.session_state.generation_message = message
-                        st.markdown('<div class="success-message">🎉 Success! Your memecoin PFP is ready!</div>', unsafe_allow_html=True)
-                    else:
-                        st.error(f"❌ {message}")
+        # Social sharing text
+        st.markdown('<h4 style="text-align: center; color: #333; margin-top: 2rem;">📱 Share on Twitter</h4>', unsafe_allow_html=True)
+        tweet_text = f"Just transformed my PFP with SolMeme Generator! {selected_style} vibes 🔥 #SolanaMemecoin #NanaBananaHackathon"
+        st.code(tweet_text)
         st.markdown('</div>', unsafe_allow_html=True)
 
-    with col2:
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.markdown('<h3 style="text-align: center; color: #333;">✨ Your SolMeme PFP</h3>', unsafe_allow_html=True)
+    else:
+        st.markdown('<div class="preview-section">', unsafe_allow_html=True)
+        st.info("🎨 Upload an image and hit generate to see your SolMeme PFP here!")
 
-        # Display generated image
-        if 'generated_image' in st.session_state:
-            st.image(
-                st.session_state.generated_image,
-                caption=f"Your {selected_style} PFP",
-                use_column_width=True
-            )
+        # Preview gallery
+        st.markdown('<h4 style="text-align: center; color: #333; margin-top: 2rem;">🎨 Style Preview</h4>', unsafe_allow_html=True)
+        st.write("Here's what each style brings to your PFP:")
 
-            # Download button
-            img_buffer = BytesIO()
-            st.session_state.generated_image.save(img_buffer, format='PNG')
-            img_buffer.seek(0)
-
-            st.download_button(
-                label="💾 Download Your PFP",
-                data=img_buffer.getvalue(),
-                file_name=f"solmeme_pfp_{selected_style.split()[1].replace('$', '')}.png",
-                mime="image/png"
-            )
-
-            # Social sharing text
-            st.markdown('<h4 style="text-align: center; color: #333;">📱 Share on Twitter</h4>', unsafe_allow_html=True)
-            tweet_text = f"Just transformed my PFP with SolMeme Generator! {selected_style} vibes 🔥 #SolanaMemecoin #NanaBananaHackathon"
-            st.code(tweet_text)
-
-        else:
-            st.info("🎨 Upload an image and hit generate to see your SolMeme PFP here!")
-
-            # Preview gallery
-            st.markdown('<h4 style="text-align: center; color: #333;">🎨 Style Preview</h4>', unsafe_allow_html=True)
-            st.write("Here's what each style brings to your PFP:")
-
-            for style_name, style_data in generator.memecoin_styles.items():
-                with st.expander(f"{style_name}"):
-                    st.write(f"**Vibe:** {style_data['description']}")
+        for style_name, style_data in generator.memecoin_styles.items():
+            with st.expander(f"{style_name}"):
+                st.write(f"**Vibe:** {style_data['description']}")
         st.markdown('</div>', unsafe_allow_html=True)
 
     # Footer with custom styling
