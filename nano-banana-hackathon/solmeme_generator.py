@@ -107,10 +107,113 @@ def main():
         layout="wide"
     )
 
-    # Header
-    st.title("🍌 SolMeme Generator")
-    st.subheader("Transform Your PFP into Solana Memecoin Vibes")
-    st.write("Upload your profile picture and choose your Solana memecoin aesthetic!")
+    # Custom CSS for modern styling
+    st.markdown("""
+    <style>
+    /* Modern gradient background */
+    .main {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-attachment: fixed;
+    }
+
+    /* Custom title styling */
+    .title-text {
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 3.5rem !important;
+        font-weight: 800 !important;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .subtitle-text {
+        color: #ffffff;
+        font-size: 1.4rem !important;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: 300;
+    }
+
+    .description-text {
+        color: #f8f9fa;
+        font-size: 1.1rem !important;
+        text-align: center;
+        margin-bottom: 2rem;
+        background: rgba(255,255,255,0.1);
+        padding: 1rem;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Card styling */
+    .card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 1rem 0;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    /* Button styling */
+    .stButton>button {
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        padding: 0.75rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255,107,107,0.3);
+    }
+
+    .stButton>button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255,107,107,0.4);
+    }
+
+    /* Sidebar styling */
+    .sidebar .sidebar-content {
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(10px);
+    }
+
+    /* File uploader styling */
+    .uploadedFile {
+        border: 2px dashed #4ecdc4;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    /* Success message styling */
+    .success-message {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    /* Footer styling */
+    .footer-text {
+        color: #f8f9fa;
+        text-align: center;
+        font-size: 0.9rem;
+        margin-top: 2rem;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Header with custom styling
+    st.markdown('<h1 class="title-text">🍌 SolMeme PFP Generator</h1>', unsafe_allow_html=True)
+    st.markdown('<h2 class="subtitle-text">Transform Your PFP into Solana Memecoin Vibes</h2>', unsafe_allow_html=True)
+    st.markdown('<p class="description-text">Upload your profile picture and choose your Solana memecoin aesthetic! Powered by Gemini 2.5 Flash Image Preview</p>', unsafe_allow_html=True)
 
     # Initialize the generator
     generator = SolMemeGenerator()
@@ -147,7 +250,8 @@ def main():
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        st.header("📸 Upload Your PFP")
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.markdown('<h3 style="text-align: center; color: #333;">📸 Upload Your PFP</h3>', unsafe_allow_html=True)
 
         # File uploader
         uploaded_file = st.file_uploader(
@@ -163,7 +267,7 @@ def main():
 
             # Generate button
             if st.button("🚀 Generate SolMeme PFP", type="primary"):
-                with st.spinner("Creating your memecoin vibe..."):
+                with st.spinner("✨ Creating your memecoin vibe... ✨"):
                     generated_image, message = generator.generate_pfp(
                         uploaded_image,
                         selected_style,
@@ -173,12 +277,14 @@ def main():
                     if generated_image:
                         st.session_state.generated_image = generated_image
                         st.session_state.generation_message = message
-                        st.success(message)
+                        st.markdown('<div class="success-message">🎉 Success! Your memecoin PFP is ready!</div>', unsafe_allow_html=True)
                     else:
-                        st.error(message)
+                        st.error(f"❌ {message}")
+        st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
-        st.header("✨ Your SolMeme PFP")
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.markdown('<h3 style="text-align: center; color: #333;">✨ Your SolMeme PFP</h3>', unsafe_allow_html=True)
 
         # Display generated image
         if 'generated_image' in st.session_state:
@@ -201,28 +307,25 @@ def main():
             )
 
             # Social sharing text
-            st.subheader("📱 Share on Twitter")
+            st.markdown('<h4 style="text-align: center; color: #333;">📱 Share on Twitter</h4>', unsafe_allow_html=True)
             tweet_text = f"Just transformed my PFP with SolMeme Generator! {selected_style} vibes 🔥 #SolanaMemecoin #NanaBananaHackathon"
             st.code(tweet_text)
 
         else:
-            st.info("Upload an image and hit generate to see your SolMeme PFP here!")
+            st.info("🎨 Upload an image and hit generate to see your SolMeme PFP here!")
 
             # Preview gallery
-            st.subheader("🎨 Style Preview")
+            st.markdown('<h4 style="text-align: center; color: #333;">🎨 Style Preview</h4>', unsafe_allow_html=True)
             st.write("Here's what each style brings to your PFP:")
 
             for style_name, style_data in generator.memecoin_styles.items():
                 with st.expander(f"{style_name}"):
                     st.write(f"**Vibe:** {style_data['description']}")
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    # Footer
+    # Footer with custom styling
     st.markdown("---")
-    st.markdown(
-        "**Built for the Nano Banana Hackathon** | "
-        "Powered by Gemini 2.5 Flash Image Preview | "
-        "Made for the Solana memecoin community 🚀"
-    )
+    st.markdown('<p class="footer-text">Built for the Nano Banana Hackathon 🚀 | Powered by Gemini 2.5 Flash Image Preview | Made for the Solana memecoin community �</p>', unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
