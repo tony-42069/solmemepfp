@@ -19,11 +19,13 @@ class SolMemeGenerator:
         """Initialize the SolMeme Generator with API client"""
         api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
-            st.error("Please set GEMINI_API_KEY in your .env file")
-            return
-
-        self.client = genai.Client(api_key=api_key)
-        self.model = "gemini-2.5-flash-image-preview"
+            st.error("Please set GEMINI_API_KEY in your .env file or Streamlit secrets")
+            # Don't return - still initialize memecoin_styles for UI
+            self.client = None
+            self.model = "gemini-2.5-flash-image-preview"
+        else:
+            self.client = genai.Client(api_key=api_key)
+            self.model = "gemini-2.5-flash-image-preview"
 
         # Memecoin style definitions with professional prompts
         self.memecoin_styles = {
@@ -112,6 +114,10 @@ The overall mood should be deliberately absurd and meme-heavy, embracing the cha
     def generate_pfp(self, uploaded_image, selected_style, custom_prompt=""):
         """Generate a memecoin-styled PFP using Nano Banana"""
         try:
+            # Check if client is available
+            if self.client is None:
+                return None, "API key not configured. Please check your Streamlit secrets."
+
             # Get the style template
             style_data = self.memecoin_styles[selected_style]
             base_prompt = style_data["prompt_template"]
