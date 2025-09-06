@@ -128,6 +128,9 @@ class SolMemeGenerator:
 
     def save_image(self, image, filename):
         """Save generated image to outputs folder"""
+        import os
+        # Create outputs folder if it doesn't exist
+        os.makedirs("outputs", exist_ok=True)
         output_path = f"outputs/{filename}"
         image.save(output_path)
         return output_path
