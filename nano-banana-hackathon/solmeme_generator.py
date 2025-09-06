@@ -27,51 +27,51 @@ class SolMemeGenerator:
             self.client = genai.Client(api_key=api_key)
             self.model = "gemini-2.5-flash-image-preview"
 
-        # Memecoin style definitions with simplified prompts to avoid 500 errors
+        # Simplified memecoin style definitions to avoid 500 errors
         self.memecoin_styles = {
             "🐕 $WIF (Dogwifhat)": {
                 "description": "Pink beanie hat, cozy vibes, dog energy",
-                "prompt_template": """Transform this person into Dogwifhat style with a pink beanie hat. Keep their facial features exactly the same."""
+                "prompt_template": "Add a soft pink knitted beanie hat to this person. Keep their face unchanged. Cozy lighting."
             },
 
             "🥜 $BONK (Bonk)": {
                 "description": "OG Solana memecoin energy, community vibes",
-                "prompt_template": """Transform this person into BONK style with purple and orange colors. Keep their facial features exactly the same."""
+                "prompt_template": "Add purple and orange Solana colors to the background. Keep the person's face exactly the same. Energetic mood."
             },
 
             "🐱 $POPCAT": {
                 "description": "Viral cat meme energy, expressive vibes",
-                "prompt_template": """Transform this person into POPCAT style with anime-inspired colors. Keep their facial features exactly the same."""
+                "prompt_template": "Add bright, colorful anime-style lighting. Keep the person's face unchanged. Vibrant background."
             },
 
             "🐧 $PENGU (Pudgy Penguins)": {
                 "description": "Cute penguin vibes, wholesome energy",
-                "prompt_template": """Transform this person into Pudgy Penguins style with winter colors. Keep their facial features exactly the same."""
+                "prompt_template": "Add winter penguin elements and soft blue background. Keep facial features unchanged."
             },
 
             "🥜 $PNUT (Peanut)": {
                 "description": "Squirrel mascot energy, viral story vibes",
-                "prompt_template": """Transform this person into Peanut the Squirrel style with woodland colors. Keep their facial features exactly the same."""
+                "prompt_template": "Add woodland squirrel elements and warm brown tones. Keep facial features unchanged."
             },
 
             "🦛 $MOODENG": {
                 "description": "Baby hippo cuteness, Thailand zoo vibes",
-                "prompt_template": """Transform this person into Moo Deng style with pastel colors. Keep their facial features exactly the same."""
+                "prompt_template": "Add pastel colors and cute hippo elements. Keep facial features unchanged."
             },
 
             "😎 $CHILLGUY": {
                 "description": "Laid-back vibes, sunglasses energy",
-                "prompt_template": """Transform this person into Chill Guy style with sunglasses. Keep their facial features exactly the same."""
+                "prompt_template": "Add stylish sunglasses and beach background. Keep facial features unchanged."
             },
 
             "🚀 $TRUMP": {
                 "description": "Presidential memecoin, political energy",
-                "prompt_template": """Transform this person into presidential style with American flag colors. Keep their facial features exactly the same."""
+                "prompt_template": "Add American flag colors and presidential styling. Keep facial features unchanged."
             },
 
             "💨 $FARTCOIN": {
                 "description": "Absurd AI-created chaos energy",
-                "prompt_template": """Transform this person into FARTCOIN style with chaotic colors. Keep their facial features exactly the same."""
+                "prompt_template": "Add chaotic colors and surreal elements. Keep facial features unchanged."
             }
         }
 
