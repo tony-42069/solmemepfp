@@ -36,10 +36,15 @@ class SolMemeGenerator:
             "🚀 $TRUMP": {
                 "description": "Presidential memecoin, political energy",
                 "prompt_template": "Transform this person into a presidential setting while keeping their face identical. Add a formal dark blue suit with red tie. Place them in front of an American flag background or presidential setting. Add official elements like presidential seal or podium. Professional lighting, formal pose, patriotic red-white-blue color scheme throughout the scene. Maintain dignified, official atmosphere while preserving their exact facial features."
+            },
+
+            "🎴 Pokemon Card": {
+                "description": "Transform into any Pokemon card style",
+                "prompt_template": "Transform this person's face onto a Pokemon trading card. Keep their exact facial features and place them as the main Pokemon character on a official Pokemon card layout. Add the classic yellow border, Pokemon logo at top, and card details at bottom. The person should be depicted in anime/Pokemon art style while maintaining their recognizable face. Include Pokemon card elements like HP, attacks, and energy symbols. Make it look like an authentic Pokemon trading card with this person as the featured Pokemon."
             }
         }
 
-    def generate_pfp(self, uploaded_image, selected_style, custom_prompt=""):
+    def generate_pfp(self, uploaded_image, selected_style, custom_prompt="", pokemon_style=None):
         """Generate a memecoin-styled PFP using Nano Banana"""
         try:
             # Check if client is available
@@ -50,6 +55,10 @@ class SolMemeGenerator:
             style_data = self.memecoin_styles[selected_style]
             base_prompt = style_data["prompt_template"]
 
+            # Add Pokemon character style if specified
+            if selected_style == "🎴 Pokemon Card" and pokemon_style and pokemon_style != "Any Pokemon":
+                base_prompt += f" Style the person as {pokemon_style} while keeping their face recognizable."
+
             # Add custom modifications if provided
             if custom_prompt:
                 base_prompt += f"\n\nAdditional modifications: {custom_prompt}"
@@ -57,6 +66,8 @@ class SolMemeGenerator:
             # Debug logging
             print(f"🔍 Using prompt (length: {len(base_prompt)} chars)")
             print(f"🎨 Style: {selected_style}")
+            if pokemon_style:
+                print(f"🎴 Pokemon Style: {pokemon_style}")
 
             # Generate the image
             response = self.client.models.generate_content(
@@ -234,6 +245,16 @@ def main():
             style_info = generator.memecoin_styles[selected_style]
             st.info(f"**Style:** {style_info['description']}")
 
+        # Pokemon character selection (only show for Pokemon Card style)
+        pokemon_style = None
+        if selected_style == "🎴 Pokemon Card":
+            st.header("🎴 Pokemon Character")
+            pokemon_style = st.selectbox(
+                "Choose Pokemon Character Style:",
+                ["Any Pokemon", "Pikachu", "Charizard", "Blastoise", "Venusaur", "Mewtwo", "Eevee", "Gengar", "Dragonite"],
+                help="Select which Pokemon character style to blend with your face"
+            )
+
         # Custom modifications
         st.header("✨ Custom Tweaks")
         custom_prompt = st.text_area(
@@ -288,7 +309,8 @@ def main():
                 generated_image, message = generator.generate_pfp(
                     uploaded_image,
                     selected_style,
-                    custom_prompt
+                    custom_prompt,
+                    pokemon_style
                 )
 
                 if generated_image:
