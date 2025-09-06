@@ -280,7 +280,7 @@ def main():
     if uploaded_file is not None:
         # Display uploaded image
         uploaded_image = Image.open(uploaded_file)
-        st.image(uploaded_image, caption="Your Original PFP", use_column_width=True)
+        st.image(uploaded_image, caption="Your Original PFP", width=400)
 
         # Generate button
         if st.button("🚀 Generate SolMeme PFP", type="primary"):
@@ -307,7 +307,7 @@ def main():
         st.image(
             st.session_state.generated_image,
             caption=f"Your {selected_style} PFP",
-            use_column_width=True
+            width=400
         )
 
         # Download button
